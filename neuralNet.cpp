@@ -1,10 +1,10 @@
 #include <cassert>
 #include <cmath>
 #include <cstdlib>
-#include <iostream>
-#include <vector>
 #include <fstream>
+#include <iostream>
 #include <sstream>
+#include <vector>
 
 using namespace std;
 
@@ -385,7 +385,7 @@ Net::Net(vector<unsigned> &topology)
         // Fill layer with neurons (add one extra biased neuron to each layer)
         for (unsigned neuronNum = 0; neuronNum <= topology[layerNum]; ++neuronNum) {
             m_layers.back().push_back(Neuron(numOutputs, neuronNum));
-            cout << "Made a neuron!\n";
+            // cout << "Made a neuron!\n";
         }
 
         // Bias neuron needs to have a constant output of 1.0 value.
@@ -422,7 +422,7 @@ int main()
     while(!trainData.isEof())
     {
         ++trainingPass;
-        cout << endl << "Pass" << trainingPass;
+        cout << endl << "Pass " << trainingPass;
 
         // Get new input data and feed it forward:
         if(trainData.getNextInputs(inputVals) != topology[0])
