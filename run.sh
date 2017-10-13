@@ -9,6 +9,7 @@ mkdir -p out/
 g++ ./makeTrainingSamples.cpp -o out/makeTrainingSamples
 out/makeTrainingSamples > trainingData.txt
 g++ neuralNet.cpp -o out/neuralNet
-out/neuralNet > out/out.txt
+out/neuralNet
 
-echo "see out/out.txt"
+python graphit.py out/out.csv out/out.png
+open out/out.png
