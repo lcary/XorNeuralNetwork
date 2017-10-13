@@ -394,14 +394,14 @@ Net::Net(vector<unsigned> &topology)
     }
 }
 
-void showVectorVals(string label, vector<double> &v)
+void showVectorVals(string label, vector<double> &v, ofstream &outfile)
 {
-    cout << label << " ";
+    outfile << label << " ";
     for(unsigned i = 0; i < v.size(); ++i)
     {
-        cout << v[i] << " ";
+        outfile << v[i] << " ";
     }
-    cout << endl;
+    outfile << endl;
 }
 
 int main()
@@ -417,33 +417,49 @@ int main()
     trainData.getTopology(topology);
     Net myNet(topology);
 
-    vector<double> inputVals, targetVals, resultVals;
-    int trainingPass = 0;
-    while(!trainData.isEof())
-    {
-        ++trainingPass;
-        cout << endl << "Pass " << trainingPass;
+    ofstream csvout;
+    ofstream txtout;
+    try {
+        csvout.open("out/out.csv");
+        txtout.open("out/out.txt");
 
-        // Get new input data and feed it forward:
-        if(trainData.getNextInputs(inputVals) != topology[0])
-            break;
-        showVectorVals(": Inputs :", inputVals);
-        myNet.feedForward(inputVals);
+        csvout << "TrainingPass" << "," << "RecentAverageError" << endl;
 
-        // Collect the net's actual results:
-        myNet.getResults(resultVals);
-        showVectorVals("Outputs:", resultVals);
+        vector<double> inputVals, targetVals, resultVals;
+        int trainingPass = 0;
+        while(!trainData.isEof())
+        {
+            ++trainingPass;
+            txtout << endl << "Pass " << trainingPass;
 
-        // Train the net what the outputs should have been:
-        trainData.getTargetOutputs(targetVals);
-        showVectorVals("Targets:", targetVals);
-        assert(targetVals.size() == topology.back());
+            // Get new input data and feed it forward:
+            if(trainData.getNextInputs(inputVals) != topology[0])
+                break;
+            showVectorVals(": Inputs :", inputVals, txtout);
+            myNet.feedForward(inputVals);
 
-        myNet.backProp(targetVals);
+            // Collect the net's actual results:
+            myNet.getResults(resultVals);
+            showVectorVals("Outputs:", resultVals, txtout);
 
-        // Report how well the training is working, average over recnet
-        cout << "Net recent average error: "
-             << myNet.getRecentAverageError() << endl;
+            // Train the net what the outputs should have been:
+            trainData.getTargetOutputs(targetVals);
+            showVectorVals("Targets:", targetVals, txtout);
+            assert(targetVals.size() == topology.back());
+
+            myNet.backProp(targetVals);
+
+            // Report how well the training is working, average over recnet
+            txtout << "Net recent average error: ";
+            txtout << myNet.getRecentAverageError() << endl;
+
+            // Create csv of errors
+            csvout << trainingPass << "," << myNet.getRecentAverageError() << endl;
+        }
+    }
+    catch(...) {
+        csvout.close();
+        txtout.close();
     }
 
     cout << endl << "Done" << endl;
