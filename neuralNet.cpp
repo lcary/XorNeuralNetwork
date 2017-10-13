@@ -131,7 +131,7 @@ private:
     vector<Connection> m_outputWeights;
     unsigned m_myIndex;
     double m_gradient;
-}
+};
 
 double Neuron::eta = 0.15;   // overall net learning weight, [0.0..1.0]
 double Neuron::alpha = 0.5;  // momentum, multiplier of last deltaWeight, [0.0..n]
@@ -163,7 +163,7 @@ void Neuron::updateInputWeights(Layer &prevLayer)
                 * neuron.getOutputVal()
                 * m_gradient
                 // Also add momentum = fraction of the previous delta weight
-                + aplha  // common symbol used by neural net textbooks
+                + alpha  // common symbol used by neural net textbooks
                 * oldDeltaWeight; // keeps on moving in same direction
 
         neuron.m_outputWeights[m_myIndex].deltaWeight = newDeltaWeight;
@@ -240,6 +240,9 @@ void Neuron::feedForward(const Layer &prevLayer)
         sum += prevLayer[n].getOutputVal() *
                 prevLayer[n].m_outputWeights[m_myIndex].weight;
     }
+
+    // Activation (aka transfer) function
+    m_outputVal = Neuron::transferFunction(sum);
 }
 
 Neuron::Neuron(unsigned numOutputs, unsigned myIndex)
@@ -250,9 +253,6 @@ Neuron::Neuron(unsigned numOutputs, unsigned myIndex)
     }
 
     m_myIndex = myIndex;
-
-    // Activation (aka transfer) function
-    m_outputVal = Neuron::transferFunction(sum);
 }
 
 
@@ -265,6 +265,7 @@ public:
     void feedForward(const vector<double> &inputVals);
     void backProp(const vector<double> &targetVals);
     void getResults(vector<double> &resultVals) const;
+    double getRecentAverageError(void) const { return m_recentAverageError; }
 
 private:
     vector<Layer> m_layers;  // m_layers[layerNum][neuronNum]
@@ -324,7 +325,7 @@ void Net::backProp(const vector<double> &targetVals)
         m_error = delta * delta;
     }
 
-    m_error /= outputLayer.size() - 1  // get average error squared
+    m_error /= outputLayer.size() - 1;  // get average error squared
     m_error = sqrt(m_error);  // RMS
 
     // This has nothing to do with neural net itself, but helps
@@ -391,6 +392,16 @@ Net::Net(vector<unsigned> &topology)
         // Force the last neuron created in each layer to have this output:
         m_layers.back().back().setOutputVal(1.0);
     }
+}
+
+void showVectorVals(string label, vector<double> &v)
+{
+    cout << label << " ";
+    for(unsigned i = 0; i < v.size(); ++i)
+    {
+        cout << v[i] << " ";
+    }
+    cout << endl;
 }
 
 int main()
