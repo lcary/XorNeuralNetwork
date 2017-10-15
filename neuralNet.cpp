@@ -261,7 +261,7 @@ Neuron::Neuron(unsigned numOutputs, unsigned myIndex)
 class Net
 {
 public:
-    Net(vector<unsigned> &topology);
+    Net(const vector<unsigned> &topology);
     void feedForward(const vector<double> &inputVals);
     void backProp(const vector<double> &targetVals);
     void getResults(vector<double> &resultVals) const;
@@ -285,28 +285,6 @@ void Net::getResults(vector<double> &resultVals) const
     // value onto result vals.
     for (unsigned n = 0; n < m_layers.back().size() - 1; ++n) {
         resultVals.push_back(m_layers.back()[n].getOutputVal());
-    }
-}
-
-void Net::feedForward(const vector<double> &inputVals)
-{
-    // Ensure number of input values is same as number of input neurons
-    // (minus 1 for the bias neuron in each layer).
-    assert(inputVals.size() == m_layers[0].size() - 1);
-
-    // Assign (latch) the input values into the input neurons.
-    for (unsigned i = 0; i < inputVals.size(); i++) {
-        m_layers[0][i].setOutputVal(inputVals[i]);
-    }
-
-    // Forward propagation (start with first layer, skipping inputs).
-    // Iterate through neurons, skipping biased neuron.
-    // Address an individual neuron to update output value (maths).
-    for (unsigned layerNum = 1; layerNum < m_layers.size(); ++layerNum) {
-        Layer &prevLayer = m_layers[layerNum - 1];
-        for (unsigned n = 0; n < m_layers[layerNum].size() - 1; ++n) {
-            m_layers[layerNum][n].feedForward(prevLayer);
-        }
     }
 }
 
@@ -372,7 +350,29 @@ void Net::backProp(const vector<double> &targetVals)
     }
 }
 
-Net::Net(vector<unsigned> &topology)
+void Net::feedForward(const vector<double> &inputVals)
+{
+    // Ensure number of input values is same as number of input neurons
+    // (minus 1 for the bias neuron in each layer).
+    assert(inputVals.size() == m_layers[0].size() - 1);
+
+    // Assign (latch) the input values into the input neurons.
+    for (unsigned i = 0; i < inputVals.size(); ++i) {
+        m_layers[0][i].setOutputVal(inputVals[i]);
+    }
+
+    // Forward propagation (start with first layer, skipping inputs).
+    // Iterate through neurons, skipping biased neuron.
+    // Address an individual neuron to update output value (maths).
+    for (unsigned layerNum = 1; layerNum < m_layers.size(); ++layerNum) {
+        Layer &prevLayer = m_layers[layerNum - 1];
+        for (unsigned n = 0; n < m_layers[layerNum].size() - 1; ++n) {
+            m_layers[layerNum][n].feedForward(prevLayer);
+        }
+    }
+}
+
+Net::Net(const vector<unsigned> &topology)
 {
     unsigned numLayers = topology.size();
     for (unsigned layerNum = 0; layerNum < numLayers; ++layerNum) {
