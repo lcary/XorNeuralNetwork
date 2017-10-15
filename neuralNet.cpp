@@ -271,9 +271,11 @@ private:
     vector<Layer> m_layers;  // m_layers[layerNum][neuronNum]
     double m_error;
     double m_recentAverageError;
-    double m_recentAverageSmoothingFactor;
+    static double m_recentAverageSmoothingFactor;
 
 };
+
+double Net::m_recentAverageSmoothingFactor = 100.0;
 
 void Net::getResults(vector<double> &resultVals) const
 {
@@ -322,7 +324,7 @@ void Net::backProp(const vector<double> &targetVals)
     for (unsigned n = 0; n < outputLayer.size() - 1; ++n) {
         // target minus actual is error delta
         double delta = targetVals[n] - outputLayer[n].getOutputVal();
-        m_error = delta * delta;
+        m_error += delta * delta;
     }
 
     m_error /= outputLayer.size() - 1;  // get average error squared
