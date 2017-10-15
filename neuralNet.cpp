@@ -141,7 +141,7 @@ void Neuron::updateInputWeights(Layer &prevLayer)
     // The weights to be updated are in the Connection container
     // in the neurons of the preceding layer (including bias neuron).
 
-    for (unsigned n; n < prevLayer.size(); ++n) {
+    for (unsigned n = 0; n < prevLayer.size(); ++n) {
 
         // Convenience variable
         Neuron &neuron = prevLayer[n];
