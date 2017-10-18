@@ -19,10 +19,6 @@ def main():
     y = []
     header = None
 
-    total_len =file_len(input_filepath)
-    # sample_rate = total_len
-    sample_rate = total_len / 10000
-
     with open(input_filepath, 'r') as csvfile:
         plots = csv.reader(csvfile, delimiter=',')
         for (index, row) in enumerate(plots):
@@ -39,10 +35,11 @@ def main():
     plt.ylabel(header[1])
     plt.title('Net recent average error over course of training')
     plt.legend()
+
     print('plotting...')
-    plt.show()
-    # plt.savefig(output_filepath)
-    # print("Wrote: {}".format(output_filepath))
+    # plt.show()  # uncomment for displaying in GUI
+    plt.savefig(output_filepath)
+    print("Wrote: {}".format(output_filepath))
 
 if __name__ == '__main__':
     main()
