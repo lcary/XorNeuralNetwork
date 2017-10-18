@@ -2,7 +2,7 @@
 
 double Net::m_recentAverageSmoothingFactor = 100.0;
 
-void Net::getResults(vector<double> &resultVals) const
+void Net::getResults(std::vector<double> &resultVals) const
 {
     resultVals.clear();
 
@@ -13,7 +13,7 @@ void Net::getResults(vector<double> &resultVals) const
     }
 }
 
-void Net::backProp(const vector<double> &targetVals)
+void Net::backProp(const std::vector<double> &targetVals)
 {
     // Calculate overall net error (RMS of output neuron errors).
     // RMS = "Root Mean Squared Errors".
@@ -75,7 +75,7 @@ void Net::backProp(const vector<double> &targetVals)
     }
 }
 
-void Net::feedForward(const vector<double> &inputVals)
+void Net::feedForward(const std::vector<double> &inputVals)
 {
     // Ensure number of input values is same as number of input neurons
     // (minus 1 for the bias neuron in each layer).
@@ -97,7 +97,7 @@ void Net::feedForward(const vector<double> &inputVals)
     }
 }
 
-Net::Net(const vector<unsigned> &topology)
+Net::Net(const std::vector<unsigned> &topology)
 {
     unsigned numLayers = topology.size();
     for (unsigned layerNum = 0; layerNum < numLayers; ++layerNum) {

@@ -5,8 +5,6 @@
 #include <cstdlib>
 #include <vector>
 
-using namespace std;
-
 // ******************** class Neuron ********************
 
 // Does the actual math for feeding forward and calculation
@@ -20,7 +18,7 @@ struct Connection
 
 class Neuron;
 
-typedef vector<Neuron> Layer;
+typedef std::vector<Neuron> Layer;
 
 class Neuron
 {
@@ -41,7 +39,7 @@ private:
     static double randomWeight(void) { return rand() / double(RAND_MAX); }
     double sumDOW(const Layer &nextLayer) const;
     double m_outputVal;
-    vector<Connection> m_outputWeights;
+    std::vector<Connection> m_outputWeights;
     unsigned m_myIndex;
     double m_gradient;
 };

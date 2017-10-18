@@ -1,12 +1,12 @@
 #include "trainingData.hpp"
 
-void TrainingData::getTopology(vector<unsigned> &topology)
+void TrainingData::getTopology(std::vector<unsigned> &topology)
 {
-    string line;
-    string label;
+    std::string line;
+    std::string label;
 
-    getline(m_trainingDataFile, line);
-    stringstream ss(line);
+    std::getline(m_trainingDataFile, line);
+    std::stringstream ss(line);
     ss >> label;
     if(this->isEof() || label.compare("topology:") != 0)
     {
@@ -22,21 +22,21 @@ void TrainingData::getTopology(vector<unsigned> &topology)
     return;
 }
 
-TrainingData::TrainingData(const string filename)
+TrainingData::TrainingData(const std::string filename)
 {
     m_trainingDataFile.open(filename.c_str());
 }
 
 
-unsigned TrainingData::getNextInputs(vector<double> &inputVals)
+unsigned TrainingData::getNextInputs(std::vector<double> &inputVals)
 {
     inputVals.clear();
 
-    string line;
-    getline(m_trainingDataFile, line);
-    stringstream ss(line);
+    std::string line;
+    std::getline(m_trainingDataFile, line);
+    std::stringstream ss(line);
 
-    string label;
+    std::string label;
     ss >> label;
     if (label.compare("in:") == 0) {
         double oneValue;
@@ -48,16 +48,16 @@ unsigned TrainingData::getNextInputs(vector<double> &inputVals)
     return inputVals.size();
 }
 
-unsigned TrainingData::getTargetOutputs(vector<double> &targetOutputVals)
+unsigned TrainingData::getTargetOutputs(std::vector<double> &targetOutputVals)
 {
     targetOutputVals.clear();
 
-    string line;
-    getline(m_trainingDataFile, line);
-    stringstream ss(line);
+    std::string line;
+    std::getline(m_trainingDataFile, line);
+    std::stringstream ss(line);
 
-    string label;
-    ss>> label;
+    std::string label;
+    ss >> label;
     if (label.compare("out:") == 0) {
         double oneValue;
         while (ss >> oneValue) {

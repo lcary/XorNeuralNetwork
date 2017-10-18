@@ -85,7 +85,7 @@ double Neuron::transferFunction(double x)
     // Use a hyperbolic tangent function
     // tanh - output range [-1.0..1.0]
     // tanh(x) = (e^x - e^-x) / (e^x + e^-x)
-    return tanh(x);
+    return std::tanh(x);
 
 }
 

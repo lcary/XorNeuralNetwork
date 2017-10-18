@@ -1,19 +1,18 @@
+#include "neuralNet.hpp"
+#include "trainingData.hpp"
 #include <cassert>
 #include <fstream>
 #include <iostream>
-#include "neuralNet.hpp"
-#include "trainingData.hpp"
+#include <string>
 
-using namespace std;
-
-void showVectorVals(string label, vector<double> &v, ofstream &outfile)
+void showVectorVals(std::string label, std::vector<double> &v, std::ofstream &outfile)
 {
     outfile << label << " ";
     for(unsigned i = 0; i < v.size(); ++i)
     {
         outfile << v[i] << " ";
     }
-    outfile << endl;
+    outfile << std::endl;
 }
 
 int main()
@@ -21,7 +20,7 @@ int main()
     TrainingData trainData("trainingData.txt");
 
     // e.g. {3, 2, 1}
-    vector<unsigned> topology;
+    std::vector<unsigned> topology;
     // topology.push_back(3);
     // topology.push_back(2);
     // topology.push_back(1);
@@ -29,20 +28,20 @@ int main()
     trainData.getTopology(topology);
     Net myNet(topology);
 
-    ofstream csvout;
-    ofstream txtout;
+    std::ofstream csvout;
+    std::ofstream txtout;
     try {
         csvout.open("out/out.csv");
         txtout.open("out/out.txt");
 
-        csvout << "TrainingPass" << "," << "RecentAverageError" << endl;
+        csvout << "TrainingPass" << "," << "RecentAverageError" << std::endl;
 
-        vector<double> inputVals, targetVals, resultVals;
+        std::vector<double> inputVals, targetVals, resultVals;
         int trainingPass = 0;
         while(!trainData.isEof())
         {
             ++trainingPass;
-            txtout << endl << "Pass " << trainingPass;
+            txtout << std::endl << "Pass " << trainingPass;
 
             // Get new input data and feed it forward:
             if(trainData.getNextInputs(inputVals) != topology[0])
@@ -63,10 +62,10 @@ int main()
 
             // Report how well the training is working, average over recnet
             txtout << "Net recent average error: ";
-            txtout << myNet.getRecentAverageError() << endl;
+            txtout << myNet.getRecentAverageError() << std::endl;
 
             // Create csv of errors
-            csvout << trainingPass << "," << myNet.getRecentAverageError() << endl;
+            csvout << trainingPass << "," << myNet.getRecentAverageError() << std::endl;
         }
     }
     catch(...) {
@@ -74,5 +73,5 @@ int main()
         txtout.close();
     }
 
-    cout << endl << "Done" << endl;
+    std::cout << std::endl << "Neural Net: Done." << std::endl;
 }

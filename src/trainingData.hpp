@@ -3,9 +3,8 @@
 
 #include <fstream>
 #include <sstream>
+#include <string>
 #include <vector>
-
-using namespace std;
 
 // ******************** class TrainingData ********************
 
@@ -14,19 +13,19 @@ using namespace std;
 class TrainingData
 {
 public:
-    TrainingData(const string filename);
+    TrainingData(const std::string filename);
     bool isEof(void)
     {
         return m_trainingDataFile.eof();
     }
-    void getTopology(vector<unsigned> &topology);
+    void getTopology(std::vector<unsigned> &topology);
 
     // Returns the number of input values read from the file:
-    unsigned getNextInputs(vector<double> &inputVals);
-    unsigned getTargetOutputs(vector<double> &targetOutputVals);
+    unsigned getNextInputs(std::vector<double> &inputVals);
+    unsigned getTargetOutputs(std::vector<double> &targetOutputVals);
 
 private:
-    ifstream m_trainingDataFile;
+    std::ifstream m_trainingDataFile;
 };
 
 #endif /* TRAINING_DATA_H */
