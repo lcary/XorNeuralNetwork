@@ -15,6 +15,4 @@ int main()
         std::cout << "in: " << n1 << ".0 " << n2 << ".0 " << std::endl;
         std::cout << "out: " << t << ".0" << std::endl; 
     }
-
-    std::cout << std::endl << "Make Training Samples: Done." << std::endl;
 }
